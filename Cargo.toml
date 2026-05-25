@@ -1,0 +1,9 @@
+[package]
+name = "math_solve"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+leptos = { version = "0.7", features = ["csr"] }
+console_error_panic_hook = "0.1"
+user_algebra = { path = "../user_algebra" }
