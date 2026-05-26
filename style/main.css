@@ -56,6 +56,29 @@ main { min-height: 100%; padding: 24px; display: flex; justify-content: center; 
   overflow-wrap: anywhere;
 }
 
+/* Clickable leaf nodes rendered inline inside the infix expression. */
+.expr-inline { display: inline; }
+.op { color: color-mix(in srgb, var(--muted) 92%, white 8%); }
+.leaf-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  margin: 0 1px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+  font: inherit;
+  line-height: 1.2;
+}
+.leaf-btn:hover { background: rgba(255,255,255,0.09); }
+.leaf-btn--selected {
+  border-color: rgba(91, 140, 255, 0.55);
+  background: rgba(91, 140, 255, 0.22);
+}
+
 .chip {
   display: inline-flex;
   gap: 8px;
@@ -83,4 +106,3 @@ main { min-height: 100%; padding: 24px; display: flex; justify-content: center; 
 @media (max-width: 900px) {
   .app { grid-template-columns: 1fr; }
 }
-

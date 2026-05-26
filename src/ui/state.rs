@@ -1,8 +1,10 @@
 use leptos::prelude::*;
 
 use crate::user_algebra_bridge::{
-    leaf_chips_from_arena_debug, parse_expression, solve_pair, LeafChip, SolveOutcome,
+    leaf_chips_from_arena, parse_expression, solve_pair, LeafChip, SolveOutcome,
 };
+use crate::ui::expression::{render_infix_expression, OnLeafClick};
+use leptos::prelude::IntoAny;
 
 /// Root application component.
 ///
@@ -56,16 +58,56 @@ pub fn App() -> impl IntoView {
         selected_a.set(None);
         selected_b.set(None);
 
-        leaf_chips.set(leaf_chips_from_arena_debug(&a));
+        leaf_chips.set(leaf_chips_from_arena(&a));
         arena.set(Some(a));
     };
+
+    // Selection logic for clickable leaves inside the infix expression renderer.
+    //
+    // Rules:
+    // - click toggles a selection on/off
+    // - at most two selections at any time
+    // - when two are selected, clicking a third leaf does nothing (user must unselect one)
+    let on_leaf_click: OnLeafClick = std::rc::Rc::new(move |id: usize| {
+        // Toggle off if clicked leaf is already selected.
+        if selected_a.get_untracked() == Some(id) {
+            selected_a.set(None);
+            status.set(None);
+            status_is_error.set(false);
+            return;
+        }
+        if selected_b.get_untracked() == Some(id) {
+            selected_b.set(None);
+            status.set(None);
+            status_is_error.set(false);
+            return;
+        }
+
+        // Fill selection slots A then B.
+        if selected_a.get_untracked().is_none() {
+            selected_a.set(Some(id));
+            status.set(None);
+            status_is_error.set(false);
+            return;
+        }
+        if selected_b.get_untracked().is_none() {
+            selected_b.set(Some(id));
+            status.set(None);
+            status_is_error.set(false);
+            return;
+        }
+
+        // Both filled -> do nothing; user must unselect one.
+        status.set(Some("Only two numbers can be selected. Click one again to unselect.".into()));
+        status_is_error.set(true);
+    });
 
     // Apply the move: solve two selected leaves by id.
     //
     // The logic crate decides whether the move is valid:
     // - `Ok`: arena is updated (numbers reduced)
     // - `Err`: arena stays unchanged, we show an error message
-    let on_solve_clicked = move |_| {
+    let try_solve = move || {
         let Some(id1) = selected_a.get_untracked() else {
             status.set(Some("Pick 2 numbers to solve.".to_string()));
             status_is_error.set(true);
@@ -92,7 +134,7 @@ pub fn App() -> impl IntoView {
                     steps.update(|v| v.push(format!("{before}  →  {after} ({ok:?})")));
 
                     // Refresh selection/leaf list after a successful reduction.
-                    leaf_chips.set(leaf_chips_from_arena_debug(ar));
+                    leaf_chips.set(leaf_chips_from_arena(ar));
                     selected_a.set(None);
                     selected_b.set(None);
 
@@ -105,6 +147,17 @@ pub fn App() -> impl IntoView {
                 }
             }
         });
+    };
+
+    let on_solve_clicked = move |_| try_solve();
+
+    // Enter key shortcut: if two leaves are selected, hitting Enter triggers Solve.
+    let on_input_keydown = move |ev: leptos::ev::KeyboardEvent| {
+        if ev.key() != "Enter" {
+            return;
+        }
+        ev.prevent_default();
+        try_solve();
     };
 
     // --- View -------------------------------------------------------------
@@ -121,6 +174,7 @@ pub fn App() -> impl IntoView {
                         class="input"
                         prop:value=move || input.get()
                         on:input=move |ev| input.set(event_target_value(&ev))
+                        on:keydown=on_input_keydown
                         placeholder="e.g. 2+3*4"
                     />
                     <button class="btn primary" on:click=move |_| rebuild()>
@@ -159,47 +213,31 @@ pub fn App() -> impl IntoView {
 
                 // The current arena rendered as an infix string.
                 <div class="expr">
-                    {move || arena.get().as_ref().map(|a| a.print_infix()).unwrap_or_else(|| "Load an expression to start.".into())}
+                    {move || arena.with(|maybe| {
+                        let Some(a) = maybe.as_ref() else {
+                            return view! { <span>"Load an expression to start."</span> }.into_any();
+                        };
+                        render_infix_expression(
+                            a,
+                            selected_a,
+                            selected_b,
+                            on_leaf_click.clone(),
+                        )
+                    })}
                 </div>
 
                 <div style="height: 10px"></div>
 
-                // Clickable list of leaf nodes (numbers).
-                // The player can choose any two leaves; `user_algebra` will accept/reject the move.
+                // Secondary view: list of leaf ids for debugging/learning.
+                // This is useful because the logic crate operates on leaf ids.
                 <div class="row">
-                    <span class="chip">"Numbers (click two):"</span>
+                    <span class="chip">"Leaf ids:"</span>
                     <For
                         each=move || leaf_chips.get()
                         key=|c| c.id
                         children=move |c| {
-                            // Each chip click fills slot A then slot B.
-                            // If both are set, clicking resets A to the new id and clears B.
-                            let on_pick = move |_| {
-                                if selected_a.get_untracked().is_none() {
-                                    selected_a.set(Some(c.id));
-                                    status.set(None);
-                                    status_is_error.set(false);
-                                } else if selected_b.get_untracked().is_none() {
-                                    if selected_a.get_untracked() == Some(c.id) {
-                                        status.set(Some("Pick two different numbers.".into()));
-                                        status_is_error.set(true);
-                                    } else {
-                                        selected_b.set(Some(c.id));
-                                        status.set(None);
-                                        status_is_error.set(false);
-                                    }
-                                } else {
-                                    selected_a.set(Some(c.id));
-                                    selected_b.set(None);
-                                    status.set(None);
-                                    status_is_error.set(false);
-                                }
-                            };
-
                             view! {
-                                <button class="btn" on:click=on_pick>
-                                    {format!("#{} = {}", c.id, c.value)}
-                                </button>
+                                <span class="chip">{format!("#{}={}", c.id, c.value)}</span>
                             }
                         }
                     />
