@@ -1,5 +1,5 @@
 [build]
-command = "rustup target add wasm32-unknown-unknown && cargo install trunk --locked && trunk build --release"
+command = "git config --global url.\"https://${GITHUB_TOKEN}@github.com/MarcoAdami/user_algebra.git\".insteadOf \"https://github.com/MarcoAdami/user_algebra.git\" rustup target add wasm32-unknown-unknown && cargo install trunk --locked && trunk build --release"
 publish = "dist"
 
 [build.environment]
