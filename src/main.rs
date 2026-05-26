@@ -20,6 +20,7 @@ use user_algebra::history::arena::Id;
 use user_algebra::history::arena::node::Node;
 use user_algebra::*;
 
+#[cfg(not(feature = "ssr"))]
 fn main() {
     console_error_panic_hook::set_once();
     mount_to_body(|| view! { <App /> })
