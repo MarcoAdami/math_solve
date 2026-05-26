@@ -1087,7 +1087,6 @@ dependencies = [
  "console_error_panic_hook",
  "gloo",
  "leptos",
- "user_algebra",
 ]
 
 [[package]]
@@ -1216,10 +1215,6 @@ checksum = "0103b1cef7ec0cf76490e969665504990193874ea05c85ff9bab8b911d0a0564"
 dependencies = [
  "zerovec",
 ]
-
-[[package]]
-name = "pratt_parser_rust"
-version = "0.1.0"
 
 [[package]]
 name = "prettyplease"
@@ -1872,14 +1867,6 @@ dependencies = [
  "idna",
  "percent-encoding",
  "serde",
-]
-
-[[package]]
-name = "user_algebra"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "pratt_parser_rust",
 ]
 
 [[package]]
