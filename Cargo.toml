@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 leptos = { version = "0.7", features = ["csr"] }
 console_error_panic_hook = "0.1"
-user_algebra = { path = "../user_algebra" }
+user_algebra = { git = "https://github.com/MarcoAdami/user_algebra.git" }
 gloo = "0.12.0"
 
 
