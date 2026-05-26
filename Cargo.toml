@@ -7,3 +7,10 @@ edition = "2024"
 leptos = { version = "0.7", features = ["csr"] }
 console_error_panic_hook = "0.1"
 user_algebra = { path = "../user_algebra" }
+gloo = "0.12.0"
+
+
+[package.metadata.leptos]
+site-root = "target/site"
+site-pkg-dir = "pkg"
+site-addr = "127.0.0.1:8080"
