@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Math Solve Visualizer</title>
+    <link rel="stylesheet" href="/main-5ce07ad3da2fd4d3.css" integrity="sha384-zNplOLZNSum/T8IAa4ICNUs7nJB/+13DDynLRd30rBu6rSkfgpqEUlQlq1BgweqM"/>
+<link rel="modulepreload" href="/math_solve-c419ec6d954b30da.js" crossorigin="anonymous" integrity="sha384-lg5jYnk/pIJJHf0EPFdWdaPYGiXunBqNH7Z4rtHxF6lYEAmQYwE96HrOWptpW2WC"><link rel="preload" href="/math_solve-c419ec6d954b30da_bg.wasm" crossorigin="anonymous" integrity="sha384-FDnGmJC0zjjDYusoZcuLaJ9yv7aaYAaHAmwguJd2laJjid/rX/X2CN98haocDaH+" as="fetch" type="application/wasm"></head>
+<body>
+    <main id="app"></main>
+    
+<script type="module">
+import init, * as bindings from '/math_solve-c419ec6d954b30da.js';
+const wasm = await init({ module_or_path: '/math_solve-c419ec6d954b30da_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+</body>
+</html>
