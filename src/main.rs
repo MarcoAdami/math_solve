@@ -28,14 +28,14 @@ fn main() {
 
 #[component]
 fn App() -> impl IntoView {
-    // Replace the signal declarations
+    // expression
     let (history, set_history) =
-        signal(History::from_str("(2 + 3) * 4".to_string()).unwrap_or_else(|_| History::new()));
+        signal(History::from_str("2 + 3 * 4".to_string()).unwrap_or_else(|_| History::new()));
     
     let (selected_leaves, set_selected_leaves) = signal(Vec::<Id>::new());
     let (error_msg, set_error_msg) = signal(None::<String>);
     let (success_msg, set_success_msg) = signal(None::<String>);
-    let (input_text, set_input_text) = signal("(2 + 3) * 4".to_string());
+    let (input_text, set_input_text) = signal("2 + 3 * 4".to_string());
 
     // Parse expression: rebuild history from input
     let parse_expression = move |_| {
