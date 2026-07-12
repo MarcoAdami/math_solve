@@ -3,15 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Math Solve Visualizer</title>
-    <link rel="stylesheet" href="/main-5ce07ad3da2fd4d3.css" integrity="sha384-zNplOLZNSum/T8IAa4ICNUs7nJB/+13DDynLRd30rBu6rSkfgpqEUlQlq1BgweqM"/>
-<link rel="modulepreload" href="/math_solve-7f1e9f874767000f.js" crossorigin="anonymous" integrity="sha384-OyZgzOOZaq0ZkVlbhZlnc+I7/CbjTgXN1jxYndnOTpqh/+A+VTioAfgs+Zmwkl/B"><link rel="preload" href="/math_solve-7f1e9f874767000f_bg.wasm" crossorigin="anonymous" integrity="sha384-p6wQQLfDKku3EEiCpmZFT9W8uJJIxrq6zJjmNE13R4OB8LjIkknNbB4SyW6kCMf0" as="fetch" type="application/wasm"></head>
+    <title>Move 2 Solve</title>
+    
+    <link rel="stylesheet" href="/style/main.css" />
+<link rel="modulepreload" href="/math_solve-dbd4904c3e80055e.js" crossorigin="anonymous" integrity="sha384-rVR+1KF5DBLxdc6sfz6kpitG+taZ1cDD+4Ttbo5slaW/WD6CjokYXWKKeFYlmfbY"><link rel="preload" href="/math_solve-dbd4904c3e80055e_bg.wasm" crossorigin="anonymous" integrity="sha384-eklUNxGn5pAfG9VVBpda4Jg6dXJHRNIKBDAG1m62gOVNc5QzFd90Vr9EdlFtQDjY" as="fetch" type="application/wasm"></head>
 <body>
     <main id="app"></main>
     
 <script type="module">
-import init, * as bindings from '/math_solve-7f1e9f874767000f.js';
-const wasm = await init({ module_or_path: '/math_solve-7f1e9f874767000f_bg.wasm' });
+import init, * as bindings from '/math_solve-dbd4904c3e80055e.js';
+const wasm = await init({ module_or_path: '/math_solve-dbd4904c3e80055e_bg.wasm' });
 
 
 window.wasmBindings = bindings;
