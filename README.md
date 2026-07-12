@@ -1,59 +1,26 @@
-# Math Solve Visualizer (Leptos CSR + Trunk)
+# Move2Solve
 
-This repo is a UI/visualizer for the `user_algebra` logic crate. It runs fully in the browser (WASM) using **Leptos (CSR)** and **Trunk**.
+## Why?
+This project started from my experience as a math tutor. I saw a lot of my student struggling to understand the rules of algebra and I wondered for some time how to help the highschooler be more confident on this topic and my first idea was this. Create a environment where the algebraic expression are dynamic as they should be and not static symbol on a sheet of paper. 
+I think this method could contribute to make students visualize in the right way expressions.
 
-## Requirements
+I am only at the start so let's see how it plays out.
 
-- Rust toolchain (edition 2024)
-- `wasm32-unknown-unknown` target
-- Trunk
 
-## Setup
+## What it is?
+This project is written in Leptos and Trunk. It is the visualizer of the real algebraic engine that is one of my private projects, `user_algebra`.
 
-Add the WASM target:
 
-```sh
-rustup target add wasm32-unknown-unknown
-```
+## How does it work?
+It enables the user to insert the expression they want to solve and edit it following the rules of algebra.
+Due to the fact that it is the visualizer of other private repos I will keep updated the list of allowed syntax and actions.
 
-Install Trunk (if you don't have it yet):
+### Allowed syntax
+- integeres up to 2^128-1 (u128)
+- binary operators: `+ - * / ^`
+- unary operators: `+ -`
 
-```sh
-cargo install trunk
-```
+### Allowed actions
+- Solve operations in order of precedence
 
-## Run (dev server)
-
-From this folder:
-
-```sh
-trunk serve --open
-```
-
-Trunk will build the WASM bundle and open the app in your browser.
-
-## Game / Moves
-
-You start by loading an expression made only of:
-
-- integers
-- operators: `+ - * / ^`
-- no parentheses
-
-### Allowed move
-
-1. Click **Load** to parse the expression into the game arena.
-2. Under **Numbers (click two):** click two different number chips (each chip has an arena id like `#7 = 12`).
-3. Click **Solve**.
-
-What happens:
-
-- The UI calls `user_algebra::solve_leaves_api(&mut arena, id1, id2)`.
-- If the move is **valid**, the expression is updated and a new entry is appended to **Steps** (a `before → after` rewrite).
-- If the move is **invalid**, the expression is unchanged and you get an error (e.g. the two leaves don’t share a parent operator).
-
-### Notes
-
-- The operator used is determined by the shared parent node in the arena (you do not choose an operator in the UI).
-- Division and exponent follow the logic crate behavior (integer math).
 
