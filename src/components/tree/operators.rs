@@ -1,6 +1,6 @@
 // file: src/components/tree/operators.rs
 use leptos::prelude::*;
-use user_algebra::history::arena::{Arena, Id};
+use user_algebra::arena::{Arena, Id};
 
 use super::tree_node::TreeNode;
 

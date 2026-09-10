@@ -20,13 +20,13 @@ pub fn App() -> impl IntoView {
 
             <div class="user-expression-container">
                 {move || {
-                    let hist = state.history.get();
-                    if hist.len() == 0 {
-                        view! { <div class="empty-tree">No expression</div> }.into_any()
-                    } else {
-                        let arena = hist.get_last();
-                        let root_id = arena.root();
-                        view! { <TreeNode arena={arena.clone()} id={root_id} /> }.into_any()
+                    let arena = state.arena.get();
+                    match arena{
+                        None=>view! { <div class="empty-tree">No expression</div> }.into_any(),
+                        Some(arena)=>{
+                            let root_id = arena.root();
+                            view! { <TreeNode arena={arena.clone()} id={root_id} /> }.into_any()
+                        }
                     }
                 }}
             </div>

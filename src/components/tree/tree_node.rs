@@ -1,7 +1,7 @@
 // file: src/components/tree/tree_node.rs
 use leptos::prelude::*;
-use user_algebra::history::arena::node::Node;
-use user_algebra::history::arena::{Arena, Id};
+use user_algebra::arena::node::Node;
+use user_algebra::arena::{Arena, Id};
 
 use super::leaf::Leaf;
 use super::operators::{render_binary_op, render_nary_op};

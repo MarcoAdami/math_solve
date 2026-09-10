@@ -1,6 +1,6 @@
 // file: src/components/tree/leaf.rs
 use leptos::prelude::*;
-use user_algebra::history::arena::Id;
+use user_algebra::arena::Id;
 
 use crate::state::AppState;
 
