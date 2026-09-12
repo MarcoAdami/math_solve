@@ -104,6 +104,10 @@ impl AppState {
                     SolveError::SameId => "Same leaf twice",
                     SolveError::NoSharedParent => "No shared parent",
                     SolveError::ParentNotOperable => "Cannot combine",
+                    SolveError::DivisionByZero=>"Cannot divide by zero",
+                    SolveError::InvalidExponent=>"Invalid exponent value",
+                    SolveError::NotExact=>"Division is not exact",
+                    SolveError::Overflow=>"Numbers to high"
                 };
                 self.set_error_msg.set(Some(msg.to_string()));
             }
