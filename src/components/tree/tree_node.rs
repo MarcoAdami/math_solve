@@ -19,11 +19,18 @@ pub fn TreeNode(arena: Arena, id: Id) -> impl IntoView {
 
         Node::Neg { child, .. } => view! {
             <div class="op-node unary">
-                <span class="op-symbol">-</span>
+                <span class="op-symbol">"-"</span>
                 <TreeNode arena={arena} id={child} />
             </div>
         }
         .into_any(),
+        Node::Par { child, .. }=> view!{
+            <div class="op-node unary">
+                <span class="op-symbol">"("</span>
+                <TreeNode arena={arena} id={child} />
+                <span class="op-symbol">")"</span>
+            </div>
+        }.into_any(),
 
         Node::Add { children, .. } => render_nary_op("+", children, arena).into_any(),
         Node::Mul { children, .. } => render_nary_op("×", children, arena).into_any(),
