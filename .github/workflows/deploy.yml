@@ -47,9 +47,16 @@ jobs:
         working-directory: math_solve
         run: trunk build --release
 
+      # Idempotente: se il progetto esiste già, il comando fallisce e si prosegue
+      - name: Crea il progetto Pages se non esiste
+        run: npx wrangler@3 pages project create move2solve --production-branch=new_layout || true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Deploy su Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy math_solve/dist --project-name=old-moon-d380
+          command: pages deploy math_solve/dist --project-name=move2solve --branch=new_layout
