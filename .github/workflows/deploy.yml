@@ -3,14 +3,32 @@ name: Deploy Leptos App to Cloudflare Pages
 on:
   push:
     branches:
-      - main # Cambia in 'master' se il tuo ramo principale si chiama master
+      - new_layout
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del codice
+      # Le 3 repo private vengono scaricate affiancate, esattamente come in
+      # locale: le dipendenze `path = "../..."` funzionano identiche in CI.
+      - name: Checkout math_solve
         uses: actions/checkout@v4
+        with:
+          path: math_solve
+
+      - name: Checkout user_algebra (privata)
+        uses: actions/checkout@v4
+        with:
+          repository: MarcoAdami/user_algebra
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: user_algebra
+
+      - name: Checkout pratt_parser_rust (privata)
+        uses: actions/checkout@v4
+        with:
+          repository: MarcoAdami/pratt_parser_rust
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: pratt_parser_rust
 
       - name: Installa la toolchain Rust e il target WASM
         uses: dtolnay/rust-toolchain@stable
@@ -19,11 +37,14 @@ jobs:
 
       - name: Cache delle dipendenze Cargo
         uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: math_solve
 
       - name: Installa Trunk
         run: cargo install trunk --locked
 
       - name: Build dell'app con Trunk
+        working-directory: math_solve
         run: trunk build --release
 
       - name: Deploy su Cloudflare Pages
@@ -32,4 +53,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: "old-moon-d380"
-          directory: "dist"
+          directory: "math_solve/dist"
